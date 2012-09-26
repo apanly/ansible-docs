@@ -10,10 +10,7 @@ Playbooks
 
 和任务执行模式相比，Playbooks是个使用ansible完全不同的方法，而且特别强大。简单地说，playbooks是个非常简单的配置管理系统、多机部署系统的基础；和现有类似系统不同，非常适合部署复杂的应用。
 
-Playbooks can declare configurations, but they can also orchestrate steps of
-any manual ordered process, even as different steps must bounce back and forth
-between sets of machines in particular orders.  They can launch tasks
-synchronously or asynchronously.
+Playbooks可以声明配置，也可以协调任何手工有序过程的步骤，即便不同的步骤需要在一系列主机上以特别的顺序执行。它还可以同步或异步地启动任务。
 
 While you might run the main /usr/bin/ansible program for ad-hoc
 tasks, playbooks are more likely to be kept in source control and used
