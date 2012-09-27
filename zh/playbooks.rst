@@ -12,16 +12,11 @@ Playbooks
 
 Playbooks可以声明配置，也可以协调任何手工有序过程的步骤，即便不同的步骤需要在一系列主机上以特别的顺序执行。它还可以同步或异步地启动任务。
 
-While you might run the main /usr/bin/ansible program for ad-hoc
-tasks, playbooks are more likely to be kept in source control and used
-to push out your configuration or assure the configurations of your
-remote systems are in spec.
+对于一般任务可以直接运行 /usr/bin/ansible，playbooks更有可能存储在源码控制系统里，用于推出配置，或者确保远程系统的配置正确。
 
-Let's dive in and see how they work.  As you go, you may wish to open
-the `github examples directory <https://github.com/ansible/ansible/tree/devel/examples/playbooks>`_ in
-another tab, so you can apply the theory to what things look like in practice.
+现在让我们深入地看看playbook是怎么工作的。可以在另一个tab中打开 `github示例目录 <https://github.com/ansible/ansible/tree/devel/examples/playbooks>`_ ，边看边做。 
 
-Playbook Language Example
+Playbook语言示例
 `````````````````````````
 
 Playbooks are expressed in YAML format and have a minimum of syntax.
