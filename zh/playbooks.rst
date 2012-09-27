@@ -46,20 +46,19 @@ Play的目标是把一组主机和明确定义的角色对应起来，而角色�
         - name: restart apache
           action: service name=apache state=restarted
 
-Below, we'll break down what the various features of the playbook language are.
+下面我们一个一个地看playbook语言的各种特点。
 
-Basics
+基础
 ``````
 
-Hosts and Users
-+++++++++++++++
+Hosts and Users (主机与用户)
++++++++++++++++++++++++++++++
 
-For each play in a playbook, you get to choose which machines in your infrastructure
-to target and what remote user to complete the steps (called tasks) as.
+对playbook中的每个play，你都可以选择你基础设施中的目标主机，以及执行任务的远程用户。
 
-The `hosts` line is a list of one or more groups or host patterns,
-separated by colons, as described in the :ref:`patterns`
-documentation.  The `user` is just the name of the user account::
+
+`hosts` 行是由冒号分割的一或多个主机组、或主机模式，详见 :ref:`patterns` 文档。
+`user` 是用户帐户名称。
 
     ---
     - hosts: webservers
