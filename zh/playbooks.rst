@@ -12,26 +12,20 @@ Playbooks
 
 Playbooks可以声明配置，也可以协调任何手工有序过程的步骤，即便不同的步骤需要在一系列主机上以特别的顺序执行。它还可以同步或异步地启动任务。
 
-对于一般任务可以直接运行 /usr/bin/ansible，playbooks更有可能存储在源码控制系统里，用于推出配置，或者确保远程系统的配置正确。
+对于一般任务可以直接运行 /usr/bin/ansible，playbooks更有可能存储在源码控制系统里，用于推出配置、确保远程系统的配置正确。
 
 现在让我们深入地看看playbook是怎么工作的。可以在另一个tab中打开 `github示例目录 <https://github.com/ansible/ansible/tree/devel/examples/playbooks>`_ ，边看边做。 
 
 Playbook语言示例
 `````````````````````````
 
-Playbooks are expressed in YAML format and have a minimum of syntax.
-Each playbook is composed of one or more 'plays' in a list.
+Playbooks用YAML格式表示，只有很少的语法。每个playbook由一或多个play组成。
 
-The goal of a play is map a group of hosts to some well defined roles, represented by
-things ansible called tasks.  At the basic level, a task is nothing more than a call
-to an ansible module, which you should have learned about in earlier chapters.
+Play的目标是把一组主机和明确定义的角色对应起来，而角色则由ansible里的任务(task)代表。在基础层面，任务只不过是对一个ansible模块的调用，在前面的章节里你可能已学过。
 
-By composing a playbook of multiple 'plays', it is possible to
-orchestrate multi-machine deployments, running certain steps on all
-machines in the webservers group, then certain steps on the database
-server group, then more commands back on the webservers group, etc.
+通过用多个play组成一个playbook，就能协调多机部署，例如：在webservers组中的所有主机上运行某些步骤，然后在数据库主机组上运行另一些步骤，然后再回来在webservers组上运行更多命令等。
 
-For starters, here's a playbook that contains just one play::
+下面是一个只有一个play组成的playbook::
 
     ---
     - hosts: webservers
