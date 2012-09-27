@@ -57,22 +57,21 @@ Hosts and Users (主机与用户)
 对playbook中的每个play，你都可以选择你基础设施中的目标主机，以及执行任务的远程用户。
 
 
-`hosts` 行是由冒号分割的一或多个主机组、或主机模式，详见 :ref:`patterns` 文档。
-`user` 是用户帐户名称。
+ `hosts` 行是由冒号分割的一或多个主机组、或主机模式，详见 :ref:`patterns` 文档。
+ `user` 是用户帐户名称。
 
     ---
     - hosts: webservers
       user: root
 
-
-Support for running things from sudo is also available::
+也可以用sudo运行命令::
 
     ---
     - hosts: webservers
       user: yourname
       sudo: True
 
-You can also login as you, and then sudo to different users than root::
+还可以一个用户登录，然后sudo成root外的其它用户::
 
     ---
     - hosts: webservers
@@ -80,27 +79,23 @@ You can also login as you, and then sudo to different users than root::
       sudo: True
       sudo_user: postgres
 
-If you need to specify a password to sudo, run `ansible-playbook` with ``--ask-sudo-pass`` (`-K`).
-If you run a sudo playbook and the playbook seems to hang, it's probably stuck at the sudo prompt.
-Just `Control-C` to kill it and run it again with `-K`.
+如果需要为sudo指定密码，可用 `ansible-playbook` 的 ``--ask-sudo-pass`` (`-K`) 选项。
+在运行sudo playbook时遇到无反应的情况，很可能是停在执行sudo时需输入密码的地方。
+输入 `Control-C` 取消此playbook，然后用 `-K` 选项重新运行。
 
-.. important::
+.. 重要::
 
-   When using `sudo_user` to a user other than root, the module
-   arguments are briefly written into a random tempfile in /tmp.
-   These are deleted immediately after the command is executed.  This
-   only occurs when sudoing from a user like 'bob' to 'timmy', not
-   when going from 'bob' to 'root', or logging in directly as 'bob' or
-   'root'.  If this concerns you that this data is briefly readable
-   (not writeable), avoid transferring uncrypted passwords with
-   `sudo_user` set.  In other cases, '/tmp' is not used and this does
-   not come into play. Ansible also takes care to not log password
-   parameters.
-
-Vars section
+    用 `sudo_user` 指令，sudo到root之外的用户时，模块参数会被暂时写到/tmp
+    目录中的一个临时文件中，命令执行后会马上删除。这种情况只会在从用户 bob
+    sudo 到 用户 timmy 时发生，从 bob sudo 为root，或直接以bob或root登录则
+    不会出现这种情况。这些数据会暂时可读(不可写)，若要避免这种情形，请勿使用
+    `sudo_user` 指令传输未加密密码。其它情况下不使用/tmp目录，没有这个问题。
+    Ansible也不会在日志中记录密码参数。
+   
+Vars (变量) 
 ++++++++++++
 
-The `vars` section contains a list of variables and values that can be used in the plays, like this::
+ `vars` 部分包括可用于play中的一组变量/值，如下所示 ::
 
     ---
     - hosts: webservers
@@ -110,39 +105,34 @@ The `vars` section contains a list of variables and values that can be used in t
          van_halen_port: 5150
          other: 'magic'
 
-These variables can be used later in the playbook like this::
+这些变量在playbook中可以如下方式使用 ::
 
-    $varname or ${varname}
+    $varname 或 ${varname}
 
-The later is useful in the event you need to do something like ${other}_some_string.
+如要以类似 ${other}_some_string 这样的方式使用变量，可使用后一种方式。
 
-Inside templates, the full power of the `Jinja2 <http://jinja.pocoo.org/docs/>`_ templating language is also available, which looks like this::
+在模板中可使用 `Jinja2 <http://jinja.pocoo.org/docs/>`_ 模板语言的全部功能，变量的引用如下所示 :: 
 
     {{ varname }}
 
-The Jinja2 documentation provides information about how to construct loops and conditionals for those
-who which to use more advanced templating.  This is optional and the $varname format still works in template
-files.
+希望使用高级模板功能的用户，Jinja2 文档提供了关于构建循环、条件语句的有关信息。
+这些是可选的，$varname 格式在模板文件仍然有效。
 
-If there are discovered variables about the system, called 'facts', these variables bubble up back into the
-playbook, and can be used on each system just like explicitly set variables.  Ansible provides several
-of these, prefixed with 'ansible', and are documented under :ref:`setup` in the module documentation.  Additionally,
-facts can be gathered by ohai and facter if they are installed.  Facter variables are prefixed with ``facter_`` and Ohai
-variables are prefixed with ``ohai_``.
+如果有关于系统发现的变量，称为 facts (事实)，这些变量会返回playbook中，在每个
+系统上可像明确设置的变量一样使用。Ansible提供了几个这种变量, 变量名以ansible开头，详见 :ref:`setup` 模块文档。此外，如果安装了 ohai 和 facter，可以用它们来收集facts。Facter变量以 ``facter_`` 为前缀，Ohai变量以 ``ohai_`` 为前缀。
 
-So for instance, if I wanted
-to write the hostname into the /etc/motd file, I could say::
+比如说我想把主机名写入/etc/motd文件，就可以 ::
 
    - name: write the motd
      action: template src=/srv/templates/motd.j2 dest=/etc/motd
 
-And in /srv/templates/motd.j2::
+在/srv/templates/motd.j2文件中::
 
    You are logged into {{ facter_hostname }}
 
-But we're getting ahead of ourselves.  Let's talk about tasks.
+现在说这些有点儿为时过早。我们来谈谈任务。
 
-Tasks list
+任务清单
 ++++++++++
 
 Each play contains a list of tasks.  Tasks are executed in order, one
