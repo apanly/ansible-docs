@@ -135,68 +135,48 @@ Vars (变量)
 任务清单
 ++++++++++
 
-Each play contains a list of tasks.  Tasks are executed in order, one
-at a time, against all machines matched by the host pattern,
-before moving on to the next task.  It is important to understand that, within a play,
-all hosts are going to get the same task directives.  It is the purpose of a play to map
-a selection of hosts to tasks.
+每个play包括一系列任务。任务在和主机模式匹配的所有主机上，按顺序一次一个执行，
+然后再执行下一个任务。在一个play中，所有主机会得到同样的任务指令。play的目的
+就是把选择的主机和任务对应起来。
 
-When running the playbook, which runs top to bottom, hosts with failed tasks are
-taken out of the rotation for the entire playbook.  If things fail, simply correct the playbook file and rerun.
+从上到下执行playbook时，有失败任务的主机会被从整个playbook的循环中剔除。如果出错的话，就更改playbook文件、重新运行。
 
-The goal of each task is to execute a module, with very specific arguments.
-Variables, as mentioned above, can be used in arguments to modules.
+每个任务的目标是以特定的参数执行模块。前面所说的变量，可作为模块的参数使用。
 
-Modules are 'idempotent', meaning if you run them
-again, they will make the changes they are told to make to bring the
-system to the desired state.  This makes it very safe to rerun
-the same playbook multiple times.  They won't change things
-unless they have to change things.
+模块是 'idempotent'，如果你重新运行，它们会做出所需改变，使系统成为所需的状态。
 
-The `command` and `shell` modules will typically rerun the same command again,
-which is totally ok if the command is something like
-'chmod' or 'setsebool', etc.  Though there is a 'creates' flag available which can
-be used to make these modules also idempotent.
+如果是chmod或setsebool这样的命令， `command` 和 `shell` 模块通常会再次运行这些命令。有个'creates'标志可使这些模块成为 idempotent。
 
-Every task should have a `name`, which is included in the output from
-running the playbook.   This is output for humans, so it is
-nice to have reasonably good descriptions of each task step.  If the name
-is not provided though, the string fed to 'action' will be used for
-output.
+每个任务都应有个 `name` ，运行playbook时会包括在其输出中。名称最好对任务步骤有
+较好的描述。如果未提供name，赋给action的字符串会用于输出。
 
-Here is what a basic task looks like, as with most modules,
-the service module takes key=value arguments::
+一个简单的任务如下所示，大多数模块像service模块一样，接受键=值参数::
 
    tasks:
      - name: make sure apache is running
        action: service name=httpd state=running
 
-The `command` and `shell` modules are the one modules that just takes a list
-of arguments, and don't use the key=value form.  This makes
-them work just like you would expect. Simple::
+ `command` 和 `shell` 模块不使用键=值的形式，接受参数列表。这使它们如你期望的。很简单::
 
    tasks:
      - name: disable selinux
        action: command /sbin/setenforce 0
 
-The command and shell module care about return codes, so if you have a command
-who's successful exit code is not zero, you may wish to do this::
+command和shell模块关心返回值，如果你有成功退出返回值非0的命令，可以这么做::
 
    tasks:
      - name: run this command and ignore the result
        action: shell /usr/bin/somecommand & /bin/true
 
-Variables can be used in action lines.   Suppose you defined
-a variable called 'vhost' in the 'vars' section, you could do this::
+action行中可使用变量。假设你在vars一节定义一个vhost变量，可以这么做::
 
    tasks:
      - name: create a virtual host file for $vhost
        action: template src=somefile.j2 dest=/etc/httpd/conf.d/$vhost
 
-Those same variables are usable in templates, which we'll get to later.
+同样的变量可用在模板中，我们稍后再讨论。
 
-Now in a very basic playbook all the tasks will be listed directly in that play, though it will usually
-make more sense to break up tasks using the 'include:' directive.  We'll show that a bit later.
+在很基本的playbook中，全部任务会直接在play中列出；正常情况下，可以用'include:'指令对任务进行分解。这个我们稍后再谈。
 
 Running Operations On Change
 ````````````````````````````
