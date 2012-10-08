@@ -178,19 +178,14 @@ action行中可使用变量。假设你在vars一节定义一个vhost变量，�
 
 在很基本的playbook中，全部任务会直接在play中列出；正常情况下，可以用'include:'指令对任务进行分解。这个我们稍后再谈。
 
-Running Operations On Change
+在发生变化时执行操作
 ````````````````````````````
 
-As we've mentioned, modules are written to be 'idempotent' and can relay  when
-they have made a change on the remote system.   Playbooks recognize this and
-have a basic event system that can be used to respond to change.
+如上所述，模块是idempotent，它们在远程系统做出变化后可以relay。以此为基础，playbooks有一个基本的事件系统，可用来应对变化。
 
-These 'notify' actions are triggered at the end of each 'play' in a playbook, and
-trigger only once each.  For instance, multiple resources may indicate
-that apache needs to be restarted, but apache will only be bounced once.
+这些notify操作在每个play结束时激活，而且只激活一次。例如，可能有多个资源表示apache需重启，不过它只会重启一次。
 
-Here's an example of restarting two services when the contents of a file
-change, but only if the file changes::
+在下例中，文件内容发生改变会重启两个服务，只有文件确实发生变化::
 
    - name: template configuration file
      action: template src=template.j2 dest=/etc/foo.conf
@@ -198,16 +193,13 @@ change, but only if the file changes::
         - restart memcached
         - restart apache
 
-The things listed in the 'notify' section of a task are called
-handlers.
+notify一节中列出的操作称为handler（处理程序）。
 
-Handlers are lists of tasks, not really any different from regular
-tasks, that are referenced by name.  Handlers are what notifiers
-notify.  If nothing notifies a handler, it will not run.  Regardless
-of how many things notify a handler, it will run only once, after all
-of the tasks complete in a particular play.
+Handler(处理程序)是一系列任务，和通常的任务没什么不同，也是用名称引用。通知程序
+通知handler。如果handler没人通知，它就不会运行。不管有多少东西通知handler，
+它只会在特定play中所有任务运行完成后，运行一次。
 
-Here's an example handlers section::
+下面是一handlers(处理程序)示例::
 
     handlers:
         - name: restart memcached
@@ -215,11 +207,10 @@ Here's an example handlers section::
         - name: restart apache
           action: service name=apache state=restarted
 
-Handlers are best used to restart services and trigger reboots.  You probably
-won't need them for much else.
+Handlers(处理程序)最适合用于重启服务、主机。别的场合很少用到。
 
-.. note::
-   Notify handlers are always run in the order written.
+.. 注::
+   通知处理程序总是以编写的顺序执行。
 
 
 Include Files And Encouraging Reuse
