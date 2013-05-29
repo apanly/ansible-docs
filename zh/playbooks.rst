@@ -213,15 +213,12 @@ Handlers(处理程序)最适合用于重启服务、主机。别的场合很少�
    通知处理程序总是以编写的顺序执行。
 
 
-Include Files And Encouraging Reuse
+包含文件鼓励重用
 ```````````````````````````````````
 
-Suppose you want to reuse lists of tasks between plays or playbooks.  You can use
-include files to do this.  Use of included task lists is a great way to define a role
-that system is going to fulfill.  Remember, the goal of a play in a playbook is to map
-a group of systems into multiple roles.  Let's see what this looks like...
+假如你希望在不同的play或playbook中重用一系列任务。可用包含文件(include files)来实现。使用包含的任务列表，是定义系统要实现的角色的一种很好的方式。别忘了playbook中play的目标是把一组系统对应到几个角色。下面让我们来看看是什么样子...
 
-A task include file simply contains a flat list of tasks, like so::
+任务包含文件只是一个简单的任务列表，如下所示:
 
     ---
     # possibly saved as tasks/foo.yml
@@ -230,22 +227,21 @@ A task include file simply contains a flat list of tasks, like so::
     - name: placeholder bar
       action: command /bin/bar
 
-Include directives look like this, and can be mixed in with regular tasks in a playbook::
+包含指令可以和playbook中正常的任务混合使用: ::
 
    tasks:
     - include: tasks/foo.yml
 
-You can also pass variables into includes.  We call this a 'parameterized include'.
+也可向包含中传入变量。这称为"参数化包含"。
 
-For instance, if deploying multiple wordpress instances, I could
-contain all of my wordpress tasks in a single wordpress.yml file, and use it like so::
+例如，部署多个wordpress实例时，可在一单独的wordpress.yml中包括所有的wordpress任务：
 
    tasks:
      - include: wordpress.yml user=timmy
      - include: wordpress.yml user=alice
      - include: wordpress.yml user=bob
 
-Variables passed in can then be used in the included files.  You can reference them like this::
+传入的变量然后就可用在包含文件里。用下面的方式引用 ::
 
    $user
 
