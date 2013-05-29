@@ -234,7 +234,7 @@ Handlers(处理程序)最适合用于重启服务、主机。别的场合很少�
 
 也可向包含中传入变量。这称为"参数化包含"。
 
-例如，部署多个wordpress实例时，可在一单独的wordpress.yml中包括所有的wordpress任务：
+例如，部署多个wordpress实例时，可在一单独的wordpress.yml中包括所有的wordpress任务： ::
 
    tasks:
      - include: wordpress.yml user=timmy
