@@ -95,7 +95,8 @@ Hosts and Users (主机与用户)
 Vars (变量) 
 ++++++++++++
 
- `vars` 部分包括可用于play中的一组变量/值，如下所示 ::
+
+ `vars` 部分包括可用于play中的一组变量/值，如下所示  ::
 
     ---
     - hosts: webservers
